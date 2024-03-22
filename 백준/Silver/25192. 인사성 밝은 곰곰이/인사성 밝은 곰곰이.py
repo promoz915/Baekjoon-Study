@@ -1,13 +1,15 @@
-def gom(n):
-    gom = set()
-    cnt = 0
-    for _ in range(n):
-        word = input()
-        if word != 'ENTER':
-            if word not in gom:
-                cnt += 1
-                gom.add(word)
-        elif word == 'ENTER':
-            gom.clear()
-    return cnt
-print(gom(int(input())))
+import sys; input = sys.stdin.readline
+
+n = int(input())
+ans = 0
+people = set()
+
+for i in range(n):
+    word = input().rstrip()
+    if word == "ENTER":
+        ans += len(people)
+        people = set()
+    else:
+        people.add(word)
+
+print(ans + len(people))
