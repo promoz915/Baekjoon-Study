@@ -11,49 +11,47 @@ for _ in range(0, n-1):                 # 노드가 n개 이므로 연결선은 
 
 depth = [0] * (n+1)                     # 노드 깊이 리스트
 parent = [0] * (n+1)                    # 노드 조상 리스트
-visited = [False] * (n+1)               # 방문 여부 저장 리스트
+result = {}
 
 def BFS(node):
-    queue = deque()
-    queue.append(node)
-    visited[node] = True
-    level = 1                           # 트리 깊이
-    now_size = 1                        # 현재 깊이에서 트리 크기
-    count = 0
+    queue = deque([node])
+    depth[node] = 1                     # 최초 노드에 depth 1 초기화
+
     while queue:
         now_node = queue.popleft()
         for next in tree[now_node]:
-            if not visited[next]:
-                visited[next] = True
-                queue.append(next)
-
-                parent[next] = now_node     # 리스트에 자신의 부모 노드 저장
-                depth[next] = level         # 리스트에 현재 깊이 저장
-        count += 1
-        if count == now_size:               # 현재 깊이의 모든 노드를 방문했다면
-            count = 0
-            now_size = len(queue)           # 바로 아래 단계 트리 노드 개수 저장
-            level += 1
+            if not depth[next]:                     # 미방문 노드일 때
+                parent[next] = now_node             # 리스트에 자신의 부모 노드 저장
+                depth[next] = depth[now_node] + 1   # 리스트에 현재 깊이 저장
+                queue.append(next)                  # 리스트에 자식 노드 저장
 
 BFS(1)
 
-def lca(a, b):
+def lca(s, e):
 
-    # 1번 노드가 depth가 더 작으면 swap
-    if depth[a] < depth[b]:
-        temp = a
-        a = b
-        b = temp
+    if s > e:
+        s, e = e, s
+
+    a, b = s, e                 # 함수 내에서 사용할 변수에 복사
+
+    # 메모이제이션, 이미 정답 쌍에 저장된 값일 시 바로 반환
+    if (a, b) in result:
+        return result[(a, b)]
 
     # 두 노드의 depth를 동일하게 맞추기
     while depth[a] != depth[b]:
-        a = parent[a]
+        if depth[a] > depth[b]:
+            a = parent[a]
+        else:
+            b = parent[b]
 
     # 두 노드의 같은 조상이 나올 때 까지 각 노드를 부모 노드로 변경하는 작업 반복
     while a != b:
         a = parent[a]
         b = parent[b]
-
+    
+    # 메모이제이션을 위한 정답 저장
+    result[(s, e)] = a
     return a
 
 m = int(input())
