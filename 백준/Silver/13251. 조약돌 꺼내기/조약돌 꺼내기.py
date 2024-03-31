@@ -1,3 +1,5 @@
+import sys; input = sys.stdin.readline
+
 d = [0] * 51
 pro = [0] * 51
 m = int(input())
