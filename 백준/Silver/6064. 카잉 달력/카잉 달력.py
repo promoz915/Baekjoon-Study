@@ -11,12 +11,9 @@ def func(m, n, x, y):
     k = x
     while k <= max_year:
         if (k-x) % m == 0 and (k-y) % n == 0:
-            break
+            return k
         k += m
-    if k > max_year:
-        return -1
-    else:
-        return k
+    return -1
 
 t = int(input())
 
