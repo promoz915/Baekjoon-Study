@@ -1,32 +1,31 @@
 MOD = 1234567891
-def func(a, b):
-    ab = 1
-    while b > 0:
-        if b % 2 == 1:
-            ab *= a
-            b -= 1
-            ab %= MOD
-        a *= a
-        a %= MOD
-        b /= 2
-    return ab
+
+def func(N):
+    n = 1
+    for i in range(2, N+1):
+        n = (n*i) % MOD
+    return n
+
+def nemo(n, k):
+    if k == 0:
+        return 1
+    elif k == 1:
+        return n
+
+    tmp = nemo(n, k//2)
+    
+    if k % 2 == 0:
+        return tmp * tmp % MOD
+    else:
+        return tmp * tmp * n % MOD
 
 t = int(input())
+
 for test_case in range(1, t+1):
-    n, k = map(int, input().split())
-    r1, r2 = 1, 1
-    for i in range(1, n+1):
-        r1 *= i
-        r1 %= MOD
-    for i in range(1, k+1):
-        r2 *= i
-        r2 %= MOD
-    for i in range(1, n-k+1):
-        r2 *= i
-        r2 %= MOD
     
-    r2 = func(r2, MOD-2)
-    r2 %= MOD
-    r1 *= r2
-    r1 %= MOD
-    print(f'#{test_case} {r1}')
+    N, K = map(int, input().split())
+    num1 = func(N)
+    num2 = func(N-K) * func(K) % MOD
+    ans = num1 * nemo(num2, MOD-2) % MOD
+
+    print(f'#{test_case} {ans}')
