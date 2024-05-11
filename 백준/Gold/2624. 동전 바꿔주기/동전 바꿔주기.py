@@ -17,5 +17,7 @@ for coin, cnt in data:
         for i in range(1, cnt + 1):
             if money - coin * i >= 0:
                 dp[money] += dp[money - coin * i]
+            else:
+                break
                 
 print(dp[t])
